@@ -1,0 +1,29 @@
+<!-- templates/students/student_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Details</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                Student Details
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ student.first_name }} {{ student.last_name }}</h5>
+                <p class="card-text">Age: {{ student.age }}</p>
+                <p class="card-text">Email: {{ student.email }}</p>
+                <p class="card-text">Phone: {{ student.phone }}</p>
+                <p class="card-text">Address: {{ student.address }}</p>
+                <p class="card-text">Date of Birth: {{ student.date_of_birth }}</p>
+                <p class="card-text">Course: {{ student.course }}</p>
+                <a href="{% url 'students:index' %}" class="btn btn-primary">Back to Students List</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
