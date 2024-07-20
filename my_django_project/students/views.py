@@ -1,5 +1,6 @@
+# views.py
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Student, Module, Registration
 from .forms import UserRegistrationForm, StudentForm, LoginForm, ModuleRegistrationForm
@@ -10,12 +11,13 @@ def all_modules(request):
     modules = Module.objects.all()  # Retrieve all modules from the database
     return render(request, 'students/all_modules.html', {'modules': modules})
 
-# Home View
 @login_required
 def home(request):
-    return render(request, 'students/home.html')
+    student = Student.objects.get(user=request.user)
+    # Get modules registered by the student
+    modules = Module.objects.filter(registration__student=student)
+    return render(request, 'students/home.html', {'modules': modules})
 
-# User Registration View
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
@@ -32,7 +34,6 @@ def register(request):
         student_form = StudentForm()
     return render(request, 'students/register.html', {'user_form': user_form, 'student_form': student_form})
 
-# User Login View
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -50,15 +51,20 @@ def user_login(request):
 @login_required
 def module_register(request):
     if request.method == 'POST':
-        form = ModuleRegistrationForm(request.POST)
-        if form.is_valid():
-            module = form.save()
-            # Create a Registration instance linking the logged-in student to the module
-            Registration.objects.create(student=request.user.student, module=module, date_of_registration=request.POST.get('date_of_registration'))
-            return redirect('students:home')  # Redirect to home after module registration
+        # Collect selected modules from the POST data
+        module_ids = request.POST.getlist('modules')
+        for module_id in module_ids:
+            module = Module.objects.get(id=module_id)
+            Registration.objects.create(student=request.user.student, module=module)
+        return redirect('students:home')
     else:
-        form = ModuleRegistrationForm()
-    return render(request, 'students/module_register.html', {'form': form})
+        modules = Module.objects.all()
+        return render(request, 'students/module_register.html', {'modules': modules})
+
+@login_required
+def logout_user(request):
+    logout(request)
+    return redirect('students:login')
 
 # DRF Views
 class StudentList(generics.ListCreateAPIView):
