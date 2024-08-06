@@ -3,59 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Profile - Student Module System</title>
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <style>
-        .profile-info {
-            margin-top: 20px;
-        }
-        .profile-info h2 {
-            color: #007bff;
-        }
-    </style>
+    <title>Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="{% url 'students:home' %}">Student Module System</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'students:register' %}">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'students:login' %}">Login</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'students:logout' %}">Logout</a>
-                    </li>
-                {% endif %}
+    <div class="container mt-4">
+        <h2 class="text-center">Profile</h2>
+        <div class="profile-details">
+            <p><strong>Student Number:</strong> {{ student.student_number }}</p>
+            <p><strong>First Name:</strong> {{ student.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ student.last_name }}</p>
+            <p><strong>Age:</strong> {{ student.age }}</p>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+            <p><strong>Phone:</strong> {{ student.phone }}</p>
+            <p><strong>Address:</strong> {{ student.address }}</p>
+            <p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
+            <p><strong>Course:</strong> {{ student.course }}</p>
+            <p><strong>Modules:</strong></p>
+            <ul>
+                {% for module in student.modules.all %}
+                    <li>{{ module.name }}</li>
+                {% empty %}
+                    <li>No modules registered.</li>
+                {% endfor %}
             </ul>
         </div>
-    </nav>
-
-    <div class="container profile-info">
-        <h2>Your Profile</h2>
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-
-        <!-- Form to update profile information -->
-        <form method="post" action="{% url 'students:profile' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="id_email">Email:</label>
-                <input type="email" name="email" id="id_email" class="form-control" value="{{ user.email }}" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Profile</button>
-        </form>
+        <a href="{% url 'students:home' %}" class="btn btn-secondary">Back to Home</a>
     </div>
-
-    <footer class="footer bg-primary text-white text-center py-3">
-        <p>&copy; 2024 Student Module System. All rights reserved.</p>
-    </footer>
-
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

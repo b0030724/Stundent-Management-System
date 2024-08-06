@@ -1,38 +1,38 @@
-
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 class Student(models.Model):
-    uuser = models.OneToOneField(User, on_delete=models.CASCADE, default=1)  # Provide a default user ID
-    student_number = models.CharField(max_length=20)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
+    student_number = models.CharField(max_length=10)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     age = models.IntegerField()
-    email = models.EmailField()
+    email = models.EmailField(max_length=100)
     phone = models.CharField(max_length=15)
     address = models.TextField()
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(default='2000-01-01')
     course = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.user.username
-
+        return f'Student: {self.first_name} {self.last_name}'
 
 class Module(models.Model):
-    code = models.CharField(max_length=10)
+    code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    credits = models.IntegerField()
+    credits = models.PositiveIntegerField()
     semester = models.CharField(max_length=20)
     instructor = models.CharField(max_length=100)
+    students = models.ManyToManyField('Student', related_name='modules', through='Registration')
 
     def __str__(self):
-        return self.name
+        return f"{self.code} - {self.name}"
 
 class Registration(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    module = models.ForeignKey(Module, on_delete=models.CASCADE)
+    student = models.ForeignKey('Student', on_delete=models.CASCADE)
+    module = models.ForeignKey('Module', on_delete=models.CASCADE)
     date_of_registration = models.DateField()
 
     def __str__(self):
-        return f"{self.student.user.username} - {self.module.name}"
+        return f'{self.student} registered for {self.module} on {self.date_of_registration}'

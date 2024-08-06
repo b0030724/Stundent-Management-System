@@ -1,46 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register for Modules</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-        <header class="my-4">
-            <h1 class="text-center text-primary">Register for Modules</h1>
-        </header>
-
-        <main>
-            <section>
-                <form method="post" action="{% url 'students:module_register' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="modules" class="form-label">Select Modules</label>
-                        {% for module in modules %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="modules" value="{{ module.id }}" id="module{{ module.id }}">
-                                <label class="form-check-label" for="module{{ module.id }}">
-                                    {{ module.name }} - {{ module.code }}
-                                </label>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </form>
-            </section>
-        </main>
-
-        <footer class="mt-4">
-            <a href="{% url 'students:home' %}" class="btn btn-secondary">Back to Home</a>
-        </footer>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Register for Modules{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Register for Modules</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Register for Modules{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Register for Modules</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+{% endblock %}

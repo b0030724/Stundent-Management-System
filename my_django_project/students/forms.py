@@ -30,8 +30,8 @@ class ModuleRegistrationForm(forms.ModelForm):
         fields = ['code', 'name', 'description', 'credits', 'semester', 'instructor']
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(max_length=150, label='Username')
+    password = forms.CharField(widget=forms.PasswordInput, label='Password')
 
 class ModuleSelectionForm(forms.Form):
     modules = forms.ModelMultipleChoiceField(

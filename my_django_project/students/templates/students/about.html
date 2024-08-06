@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">About Us</h1>
+        <p>
+            Welcome to our Student Management System. We are dedicated to providing the best services for managing student data and module registrations. Our system helps in streamlining the process of course registrations, module selection, and student information management.
+        </p>
+        <p>
+            For more information, please contact us or visit our main office.
+        </p>
+        <a href="{% url 'students:home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</body>
+</html>

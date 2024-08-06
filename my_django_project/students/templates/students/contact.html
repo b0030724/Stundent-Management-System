@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center">Contact Us</h1>
+        <p>
+            If you have any questions or need assistance, please reach out to us through the following contact details:
+        </p>
+        <ul>
+            <li><strong>Email:</strong> support@example.com</li>
+            <li><strong>Phone:</strong> +44 (123) 456-7890</li>
+            <li><strong>Address:</strong> 123 Main Street, Anytown, UK</li>
+        </ul>
+        <a href="{% url 'students:home' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</body>
+</html>

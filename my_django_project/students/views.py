@@ -1,22 +1,35 @@
-# views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Student, Module, Registration
-from .forms import UserRegistrationForm, StudentForm, LoginForm, ModuleRegistrationForm
+from .forms import UserRegistrationForm, StudentForm, LoginForm, ModuleSelectionForm
 from rest_framework import generics
 from .serializers import StudentSerializer, ModuleSerializer
 
-def all_modules(request):
-    modules = Module.objects.all()  # Retrieve all modules from the database
-    return render(request, 'students/all_modules.html', {'modules': modules})
+@login_required
+def profile(request):
+    # Retrieve the student's profile based on the logged-in user
+    student = get_object_or_404(Student, user=request.user)
+    return render(request, 'students/profile.html', {'student': student})
+
+def logout_user(request):
+    logout(request)
+    return redirect('students:login')  # Redirect to login page after logout
+
+def public_home(request):
+    return render(request, 'students/home.html')  # Public home page for unauthenticated users
 
 @login_required
 def home(request):
-    student = Student.objects.get(user=request.user)
+    student = get_object_or_404(Student, user=request.user)
     # Get modules registered by the student
     modules = Module.objects.filter(registration__student=student)
     return render(request, 'students/home.html', {'modules': modules})
+
+@login_required
+def all_modules(request):
+    modules = Module.objects.all()  # Retrieve all modules from the database
+    return render(request, 'students/all_modules.html', {'modules': modules})
 
 def register(request):
     if request.method == 'POST':
@@ -43,7 +56,7 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('students:home')
+                return redirect('students:profile')  # Redirect to profile page after login
     else:
         form = LoginForm()
     return render(request, 'students/login.html', {'form': form})
@@ -51,20 +64,23 @@ def user_login(request):
 @login_required
 def module_register(request):
     if request.method == 'POST':
-        # Collect selected modules from the POST data
-        module_ids = request.POST.getlist('modules')
-        for module_id in module_ids:
-            module = Module.objects.get(id=module_id)
-            Registration.objects.create(student=request.user.student, module=module)
-        return redirect('students:home')
+        form = ModuleSelectionForm(request.POST)
+        if form.is_valid():
+            modules = form.cleaned_data['modules']
+            student = get_object_or_404(Student, user=request.user)
+            for module in modules:
+                Registration.objects.create(student=student, module=module)
+            return redirect('students:home')
     else:
-        modules = Module.objects.all()
-        return render(request, 'students/module_register.html', {'modules': modules})
+        form = ModuleSelectionForm()
+    modules = Module.objects.all()
+    return render(request, 'students/module_register.html', {'form': form, 'modules': modules})
 
-@login_required
-def logout_user(request):
-    logout(request)
-    return redirect('students:login')
+def about(request):
+    return render(request, 'students/about.html')
+
+def contact(request):
+    return render(request, 'students/contact.html')
 
 # DRF Views
 class StudentList(generics.ListCreateAPIView):

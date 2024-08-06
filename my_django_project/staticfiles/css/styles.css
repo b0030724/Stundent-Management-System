@@ -1,0 +1,31 @@
+/* styles.css */
+
+/* Header text color */
+.text-primary {
+    color: #0f1214; /* Bootstrap primary color */
+}
+
+/* Subheadings color */
+.text-secondary {
+    color: #6c757d; /* Bootstrap secondary color */
+}
+
+/* Form labels and inputs */
+.form-group label {
+    color: #333; /* Darker color for labels */
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    border-color: #ced4da; /* Lighter border color */
+}
+
+/* Form button */
+.btn-primary {
+    background-color: #007bff; /* Bootstrap primary color */
+    border-color: #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Bootstrap secondary color */
+    border-color: #6c757d;
+}
