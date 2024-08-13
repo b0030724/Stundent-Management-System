@@ -16,15 +16,20 @@ def logout_user(request):
     logout(request)
     return redirect('students:login')  # Redirect to login page after logout
 
-def public_home(request):
-    return render(request, 'students/home.html')  # Public home page for unauthenticated users
-
-@login_required
 def home(request):
-    student = get_object_or_404(Student, user=request.user)
-    # Get modules registered by the student
-    modules = Module.objects.filter(registration__student=student)
-    return render(request, 'students/home.html', {'modules': modules})
+    if request.user.is_authenticated:
+        # User is authenticated, check if they have a student profile
+        student = getattr(request.user, 'student', None)  # Get the student's profile if it exists
+        if student:
+            # Get modules registered by the student
+            modules = Module.objects.filter(registration__student=student)
+            return render(request, 'students/home.html', {'modules': modules, 'student': student})
+        else:
+            # User is logged in but doesn't have a student profile
+            return render(request, 'students/home.html', {'message': 'You are logged in, but you don\'t have a student profile.'})
+    else:
+        # User is not authenticated, show a generic home page
+        return render(request, 'students/home.html')
 
 @login_required
 def all_modules(request):

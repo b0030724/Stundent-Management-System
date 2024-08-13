@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% block title %}Register for Modules{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <h2 class="text-center">Register for Modules</h2>
@@ -10,15 +12,4 @@
     </form>
 </div>
 {% endblock %}
-{% extends 'base.html' %}
-{% block title %}Register for Modules{% endblock %}
-{% block content %}
-<div class="container mt-4">
-    <h2 class="text-center">Register for Modules</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
-</div>
-{% endblock %}
+

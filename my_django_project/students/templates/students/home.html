@@ -12,11 +12,16 @@
     <div class="container">
         <header class="my-4">
             <h1 class="text-center text-primary">Welcome, {{ request.user.username }}!</h1>
+            <a href="{% url 'students:module_register' %}" class="btn btn-primary">Register for Modules</a>
+            <a href="{% url 'students:all_modules' %}" class="btn btn-secondary">View All Modules</a>
+            <a href="{% url 'students:logout' %}" class="btn btn-danger">Logout</a>
+        <a href="{% url 'students:profile' %}" class="btn btn-primary">Profile</a>
         </header>
 
         <main>
             {% block content %}
             <!-- Content for each specific page will be inserted here -->
+             blah blah blah
             {% endblock %}
         </main>
 
@@ -24,6 +29,7 @@
             <a href="{% url 'students:module_register' %}" class="btn btn-primary">Register for Modules</a>
             <a href="{% url 'students:all_modules' %}" class="btn btn-secondary">View All Modules</a>
             <a href="{% url 'students:logout' %}" class="btn btn-danger">Logout</a>
+            <a href="{% url 'students:contact' %}" class="btn btn-secondary">Contact us</a>
         </footer>
     </div>
 
