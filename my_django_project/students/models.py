@@ -32,7 +32,7 @@ class Module(models.Model):
 class Registration(models.Model):
     student = models.ForeignKey('Student', on_delete=models.CASCADE)
     module = models.ForeignKey('Module', on_delete=models.CASCADE)
-    date_of_registration = models.DateField()
+    date_of_registration = models.DateField(default=timezone.now)  # Set default to the current date
 
     def __str__(self):
         return f'{self.student} registered for {self.module} on {self.date_of_registration}'

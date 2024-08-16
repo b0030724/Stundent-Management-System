@@ -16,6 +16,7 @@ urlpatterns = [
      path('profile/', views.profile, name='profile'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
+    path('edit-profile/', views.edit_profile, name='edit_profile'),
 
     # API URLs
     path('api/students/', views.StudentList.as_view(), name='api_student_list'),

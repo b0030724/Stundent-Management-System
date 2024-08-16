@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Student, Module, Registration
 from datetime import date
 
+# User Registration Form
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     
@@ -11,6 +12,13 @@ class UserRegistrationForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+# Form for Editing User Details (username and email)
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+# Form for Student Profile
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
@@ -19,20 +27,27 @@ class StudentForm(forms.ModelForm):
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
 
+# Module Registration Form (used for registering students for modules)
 class ModuleRegistrationForm(forms.ModelForm):
-    date_of_registration = forms.DateField(
-        widget=forms.DateInput(attrs={'type': 'date'}),
-        initial=date.today
-    )
+    class Meta:
+        model = Registration
+        fields = ['module', 'date_of_registration']
+        widgets = {
+            'date_of_registration': forms.DateInput(attrs={'type': 'date'}),
+        }
 
+# Module Form (used for creating or editing modules)
+class ModuleForm(forms.ModelForm):
     class Meta:
         model = Module
         fields = ['code', 'name', 'description', 'credits', 'semester', 'instructor']
 
+# Login Form
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=150, label='Username')
     password = forms.CharField(widget=forms.PasswordInput, label='Password')
 
+# Module Selection Form (selecting up to two modules)
 class ModuleSelectionForm(forms.Form):
     modules = forms.ModelMultipleChoiceField(
         queryset=Module.objects.all(),
@@ -47,12 +62,3 @@ class ModuleSelectionForm(forms.Form):
         if len(data) != 2:
             raise forms.ValidationError("You must select exactly two modules.")
         return data
-
-
-    class Meta:
-        model = Module
-        fields = ['code', 'name', 'description', 'credits', 'semester', 'instructor']
-
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)

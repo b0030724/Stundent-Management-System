@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Student, Module, Registration
-from .forms import UserRegistrationForm, StudentForm, LoginForm, ModuleSelectionForm
+from .forms import UserRegistrationForm, UserForm, StudentForm, LoginForm, ModuleSelectionForm
 from rest_framework import generics
 from .serializers import StudentSerializer, ModuleSerializer
 
@@ -87,6 +87,29 @@ def about(request):
 def contact(request):
     return render(request, 'students/contact.html')
 
+
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    student = user.student  # Assuming a one-to-one relationship between User and Student
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=user)
+        student_form = StudentForm(request.POST, instance=student)
+        if user_form.is_valid() and student_form.is_valid():
+            user_form.save()
+            student_form.save()
+            return redirect('profile')  # Redirect to p
+    else:
+        user_form = UserForm(instance=user)
+        student_form = StudentForm(instance=student)
+
+    return render(request, 'edit_profile.html', {
+        'user_form': user_form,
+        'student_form': student_form
+    })
 # DRF Views
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
