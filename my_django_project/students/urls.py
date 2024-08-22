@@ -13,10 +13,11 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('modules/', views.all_modules, name='all_modules'),
     path('module_register/', views.module_register, name='module_register'),
-     path('profile/', views.profile, name='profile'),
+    path('profile/', views.profile, name='profile'),
     path('about/', views.about, name='about'),
+    path('edit-profile/', views.edit_profile, name='edit_profile'), 
     path('contact/', views.contact, name='contact'),
-    path('edit-profile/', views.edit_profile, name='edit_profile'),
+    
 
     # API URLs
     path('api/students/', views.StudentList.as_view(), name='api_student_list'),

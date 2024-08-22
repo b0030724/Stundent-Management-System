@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Student, Module, Registration
-from .forms import UserRegistrationForm, UserForm, StudentForm, LoginForm, ModuleSelectionForm
+from .forms import UserRegistrationForm, UserForm, StudentForm, LoginForm, ModuleSelectionForm, ContactForm
 from rest_framework import generics
 from .serializers import StudentSerializer, ModuleSerializer
+from django.urls import reverse  # Ensure you can reverse URLs
 
 @login_required
 def profile(request):
@@ -87,9 +88,6 @@ def about(request):
 def contact(request):
     return render(request, 'students/contact.html')
 
-
-
-
 @login_required
 def edit_profile(request):
     user = request.user
@@ -101,15 +99,40 @@ def edit_profile(request):
         if user_form.is_valid() and student_form.is_valid():
             user_form.save()
             student_form.save()
-            return redirect('profile')  # Redirect to p
+            return redirect('students:profile')  # Redirect to profile page after editing
     else:
         user_form = UserForm(instance=user)
         student_form = StudentForm(instance=student)
 
-    return render(request, 'edit_profile.html', {
+    return render(request, 'students/edit_profile.html', {
         'user_form': user_form,
         'student_form': student_form
     })
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            
+            # Send email
+            send_mail(
+                subject=f"Contact Form Submission from {name}",
+                message=message,
+                from_email=email,
+                recipient_list=['your_email@example.com'],  # Replace with your email
+                fail_silently=False,
+            )
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('students:contact')
+    else:
+        form = ContactForm()
+
+    return render(request, 'students/contact.html', {'form': form})
+
 # DRF Views
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()

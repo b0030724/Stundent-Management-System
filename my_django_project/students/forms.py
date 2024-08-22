@@ -62,3 +62,8 @@ class ModuleSelectionForm(forms.Form):
         if len(data) != 2:
             raise forms.ValidationError("You must select exactly two modules.")
         return data
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True, label="Your Name")
+    email = forms.EmailField(max_length=100, required=True, label="Your Email")
+    message = forms.CharField(widget=forms.Textarea, required=True, label="Your Message")

@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Welcome to the Login page {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h2 class="text-center">Login</h2>
+    <a href="{% url 'students:home' %}" class="btn btn-secondary">Home</a>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
