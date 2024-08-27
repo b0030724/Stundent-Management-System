@@ -5,7 +5,7 @@ from .models import Student, Module, Registration
 from .forms import UserRegistrationForm, UserForm, StudentForm, LoginForm, ModuleSelectionForm, ContactForm
 from rest_framework import generics
 from .serializers import StudentSerializer, ModuleSerializer
-from django.urls import reverse  # Ensure you can reverse URLs
+from django.urls import reverse  
 
 @login_required
 def profile(request):
@@ -67,7 +67,6 @@ def user_login(request):
         form = LoginForm()
     return render(request, 'students/login.html', {'form': form})
 
-@login_required
 def module_register(request):
     if request.method == 'POST':
         form = ModuleSelectionForm(request.POST)
@@ -75,18 +74,28 @@ def module_register(request):
             modules = form.cleaned_data['modules']
             student = get_object_or_404(Student, user=request.user)
             for module in modules:
+                print(f"Registering {student} to {module}")  # Debugging statement
                 Registration.objects.create(student=student, module=module)
             return redirect('students:home')
+        else:
+            print("Form errors:", form.errors)  # Debugging statement
     else:
         form = ModuleSelectionForm()
     modules = Module.objects.all()
     return render(request, 'students/module_register.html', {'form': form, 'modules': modules})
+
+def all_modules(request):
+    modules = Module.objects.all()
+    return render(request, 'students/module_list.html', {'modules': modules})
 
 def about(request):
     return render(request, 'students/about.html')
 
 def contact(request):
     return render(request, 'students/contact.html')
+
+def some_view(request):
+    return redirect('students:all_modules')
 
 @login_required
 def edit_profile(request):

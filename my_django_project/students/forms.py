@@ -22,7 +22,7 @@ class UserForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['student_number', 'first_name', 'last_name', 'age', 'email', 'phone', 'address', 'date_of_birth', 'course']
+        fields = ['student_number', 'phone', 'address', 'date_of_birth', 'course']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -63,6 +63,7 @@ class ModuleSelectionForm(forms.Form):
             raise forms.ValidationError("You must select exactly two modules.")
         return data
 
+# Contact Form
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, required=True, label="Your Name")
     email = forms.EmailField(max_length=100, required=True, label="Your Email")

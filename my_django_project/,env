@@ -1,0 +1,4 @@
+# .env file
+EMAIL_HOST_USER='b0030724@hallam.shu.ac.uk'
+EMAIL_HOST_PASSWORD='HiBecki123'
+DEFAULT_FROM_EMAIL='b0030724@hallam.shu.ac.uk'

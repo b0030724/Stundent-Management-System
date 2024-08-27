@@ -11,12 +11,13 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.logout_user, name='logout'),
-    path('modules/', views.all_modules, name='all_modules'),
+    path('all_modules/', views.all_modules, name='all_modules'),
     path('module_register/', views.module_register, name='module_register'),
     path('profile/', views.profile, name='profile'),
     path('about/', views.about, name='about'),
     path('edit-profile/', views.edit_profile, name='edit_profile'), 
     path('contact/', views.contact, name='contact'),
+    path
     
 
     # API URLs

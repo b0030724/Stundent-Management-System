@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,7 +49,16 @@ LOGIN_URL = 'students:login'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4' 
-LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
+LOGOUT_REDIRECT_URL = '/login/'  
+
+load_dotenv()
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('b0030724@hallam.shu.ac.uk') 
+EMAIL_HOST_PASSWORD = os.getenv('HiBecki123') 
+DEFAULT_FROM_EMAIL = os.getenv( 'b0030724@hallam.shu.ac.uk')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
