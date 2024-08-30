@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from . import views
+from . import views 
+from .views import success, contact
 
 app_name = 'students'
 
 urlpatterns = [
-   
     path('home/', views.home, name='home'),
     path('register/', views.register, name='register'),
     path('login/', views.user_login, name='login'),
@@ -17,8 +17,8 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('edit-profile/', views.edit_profile, name='edit_profile'), 
     path('contact/', views.contact, name='contact'),
-    path
-    
+    path('success/', success, name='success'),
+    path('course/<int:id>/', views.course_detail, name='course_detail'),
 
     # API URLs
     path('api/students/', views.StudentList.as_view(), name='api_student_list'),

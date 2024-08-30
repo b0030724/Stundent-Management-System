@@ -1,40 +1,58 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .models import Student, Module, Registration
+from django.contrib import messages
+from django.core.mail import EmailMessage, send_mail
+from django.urls import reverse
+from django.http import HttpResponse
+
+from .models import Student, Module, Registration, Course
 from .forms import UserRegistrationForm, UserForm, StudentForm, LoginForm, ModuleSelectionForm, ContactForm
 from rest_framework import generics
 from .serializers import StudentSerializer, ModuleSerializer
-from django.urls import reverse  
+
+def course_detail(request, id):
+    course = get_object_or_404(Course, id=id)
+    return render(request, 'students/course_detail.html', {'course': course})
 
 @login_required
 def profile(request):
-    # Retrieve the student's profile based on the logged-in user
     student = get_object_or_404(Student, user=request.user)
     return render(request, 'students/profile.html', {'student': student})
 
 def logout_user(request):
     logout(request)
-    return redirect('students:login')  # Redirect to login page after logout
+    messages.success(request, "You have successfully logged out.")
+    return redirect('students:home')
 
 def home(request):
+    # Get a list of all courses
+    courses = Course.objects.all()
+    context = {'courses': courses}
+
     if request.user.is_authenticated:
-        # User is authenticated, check if they have a student profile
-        student = getattr(request.user, 'student', None)  # Get the student's profile if it exists
-        if student:
-            # Get modules registered by the student
+        try:
+            student = request.user.student
+            # Get the modules associated with the student's profile
             modules = Module.objects.filter(registration__student=student)
-            return render(request, 'students/home.html', {'modules': modules, 'student': student})
-        else:
-            # User is logged in but doesn't have a student profile
-            return render(request, 'students/home.html', {'message': 'You are logged in, but you don\'t have a student profile.'})
+            context.update({
+                'student': student,
+                'modules': modules,
+            })
+        except Student.DoesNotExist:
+            context.update({
+                'message': "You are logged in, but you don't have a student profile.",
+            })
     else:
-        # User is not authenticated, show a generic home page
-        return render(request, 'students/home.html')
+        context.update({
+            'message': "You are not logged in. Some features may be limited.",
+        })
+
+    return render(request, 'students/home.html', context)
 
 @login_required
 def all_modules(request):
-    modules = Module.objects.all()  # Retrieve all modules from the database
+    modules = Module.objects.all()
     return render(request, 'students/all_modules.html', {'modules': modules})
 
 def register(request):
@@ -44,10 +62,10 @@ def register(request):
         if user_form.is_valid() and student_form.is_valid():
             user = user_form.save()
             student = student_form.save(commit=False)
-            student.user = user  # Link student to the newly created user
+            student.user = user
             student.save()
-            login(request, user)  # Log the user in after registration
-            return redirect('students:home')  # Redirect to the home page
+            login(request, user)
+            return redirect('students:home')
     else:
         user_form = UserRegistrationForm()
         student_form = StudentForm()
@@ -62,62 +80,36 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('students:profile')  # Redirect to profile page after login
+                return redirect('students:profile')
+            else:
+                messages.error(request, "Invalid username or password.")
     else:
         form = LoginForm()
     return render(request, 'students/login.html', {'form': form})
 
+@login_required
 def module_register(request):
+    try:
+        student = request.user.student
+    except Student.DoesNotExist:
+        messages.error(request, 'You must have a student profile to register for modules.')
+        return redirect('students:home')
+
     if request.method == 'POST':
         form = ModuleSelectionForm(request.POST)
         if form.is_valid():
             modules = form.cleaned_data['modules']
-            student = get_object_or_404(Student, user=request.user)
             for module in modules:
-                print(f"Registering {student} to {module}")  # Debugging statement
                 Registration.objects.create(student=student, module=module)
             return redirect('students:home')
-        else:
-            print("Form errors:", form.errors)  # Debugging statement
     else:
         form = ModuleSelectionForm()
+
     modules = Module.objects.all()
     return render(request, 'students/module_register.html', {'form': form, 'modules': modules})
 
-def all_modules(request):
-    modules = Module.objects.all()
-    return render(request, 'students/module_list.html', {'modules': modules})
-
 def about(request):
     return render(request, 'students/about.html')
-
-def contact(request):
-    return render(request, 'students/contact.html')
-
-def some_view(request):
-    return redirect('students:all_modules')
-
-@login_required
-def edit_profile(request):
-    user = request.user
-    student = user.student  # Assuming a one-to-one relationship between User and Student
-
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=user)
-        student_form = StudentForm(request.POST, instance=student)
-        if user_form.is_valid() and student_form.is_valid():
-            user_form.save()
-            student_form.save()
-            return redirect('students:profile')  # Redirect to profile page after editing
-    else:
-        user_form = UserForm(instance=user)
-        student_form = StudentForm(instance=student)
-
-    return render(request, 'students/edit_profile.html', {
-        'user_form': user_form,
-        'student_form': student_form
-    })
-
 
 def contact(request):
     if request.method == 'POST':
@@ -132,15 +124,43 @@ def contact(request):
                 subject=f"Contact Form Submission from {name}",
                 message=message,
                 from_email=email,
-                recipient_list=['your_email@example.com'],  # Replace with your email
+                recipient_list=['b0030724@my.shu.uk'],  
                 fail_silently=False,
             )
             messages.success(request, 'Your message has been sent successfully!')
-            return redirect('students:contact')
+            return redirect('students:success')
     else:
         form = ContactForm()
 
     return render(request, 'students/contact.html', {'form': form})
+
+def success(request):
+    return HttpResponse('Success! Your message has been sent.')
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    try:
+        student = user.student
+    except Student.DoesNotExist:
+        messages.error(request, 'Student profile not found.')
+        return redirect('students:home')
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=user)
+        student_form = StudentForm(request.POST, instance=student)
+        if user_form.is_valid() and student_form.is_valid():
+            user_form.save()
+            student_form.save()
+            return redirect('students:profile')
+    else:
+        user_form = UserForm(instance=user)
+        student_form = StudentForm(instance=student)
+
+    return render(request, 'students/edit_profile.html', {
+        'user_form': user_form,
+        'student_form': student_form
+    })
 
 # DRF Views
 class StudentList(generics.ListCreateAPIView):

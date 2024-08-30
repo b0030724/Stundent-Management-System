@@ -1,0 +1,28 @@
+<!-- templates/students/course_modules.html -->
+<!DOCTYPE html>
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.name }} Modules</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Modules for {{ course.name }}</h1>
+        <ul class="list-group">
+            {% for module in modules %}
+                <li class="list-group-item">
+                    {{ module.title }} ({{ module.credits }} credits)
+                </li>
+            {% empty %}
+                <li class="list-group-item">No modules available for this course.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'students:course_list' %}" class="btn btn-primary mt-4">Back to Courses</a>
+    </div>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

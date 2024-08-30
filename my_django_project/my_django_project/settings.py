@@ -53,12 +53,13 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 load_dotenv()
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'
-EMAIL_PORT = 587
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = 'ed37add6c0e1e2'
+EMAIL_HOST_PASSWORD = '94476ae954d80f'
+EMAIL_PORT = '2525'
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('b0030724@hallam.shu.ac.uk') 
-EMAIL_HOST_PASSWORD = os.getenv('HiBecki123') 
-DEFAULT_FROM_EMAIL = os.getenv( 'b0030724@hallam.shu.ac.uk')
+EMAIL_USE_SSL = False
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
