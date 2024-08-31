@@ -1,5 +1,10 @@
 /* styles.css */
 
+/* Global text color for the entire page */
+body {
+    color: #28a745; /* Customize this color as needed */
+}
+
 /* Header text color */
 .text-primary {
     color: #0f1214; /* Bootstrap primary color */
@@ -29,3 +34,14 @@
     background-color: #6c757d; /* Bootstrap secondary color */
     border-color: #6c757d;
 }
+/* Define the custom text color */
+.text-success-emphasis {
+    color: #28a745; /* This is the green color used for success in Bootstrap */
+    font-weight: bold; /* Optional: Makes the text bold */
+}
+
+/* Apply text color to the entire page */
+body {
+    color: #28a745; /* This is the green color used for success in Bootstrap */
+}
+

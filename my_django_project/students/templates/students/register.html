@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+
 {% block title %}Register{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <h2 class="text-center">Register</h2>
@@ -9,5 +11,6 @@
         {{ student_form.as_p }}
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
+    <p class="mt-3">Already have an account? <a href="{% url 'students:login' %}">Login here</a></p>
 </div>
 {% endblock %}

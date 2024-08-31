@@ -5,6 +5,7 @@ from django.utils import timezone  # Import timezone for default
 from datetime import date
 
 class Course(models.Model):
+    course_code = models.CharField(max_length=10, null=True, blank=True)
     name = models.CharField(max_length=200)
     description = models.TextField()
     credits = models.IntegerField(default=0)
@@ -23,7 +24,7 @@ class Student(models.Model):
     address = models.TextField()
     date_of_birth = models.DateField(default='2000-01-01')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  # Reference to Course
-
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     def __str__(self):
         return f'Student: {self.first_name} {self.last_name}'
 
@@ -40,7 +41,7 @@ class Module(models.Model):
     semester = models.CharField(max_length=20)
     instructor = models.CharField(max_length=100)
     students = models.ManyToManyField('Student', related_name='modules', through='Registration')
-
+    course = models.ForeignKey(Course, related_name='modules', on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f"{self.code} - {self.name}"
 
@@ -51,4 +52,6 @@ class Registration(models.Model):
 
     def __str__(self):
         return f'{self.student.user.username} registered for {self.module.name} on {self.date_of_registration}'
+    
+
 

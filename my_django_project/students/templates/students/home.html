@@ -1,72 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% extends 'base.html' %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Home{% endblock %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-        <header class="my-4">
-            <h1 class="text-center text-primary">Welcome to Student Management System{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h1>
+{% extends 'base.html' %}
 
-            {% if user.is_authenticated %}
-                <a href="{% url 'students:module_register' %}" class="btn btn-primary">Register for Modules</a>
-                <a href="{% url 'students:all_modules' %}" class="btn btn-secondary">View All Modules</a>
-                <a href="{% url 'students:logout' %}" class="btn btn-danger">Logout</a>
-                <a href="{% url 'students:profile' %}" class="btn btn-light">Profile</a>
-            {% else %}
-                <a href="{% url 'students:login' %}" class="btn btn-primary">Login</a>
-                <a href="{% url 'students:register' %}" class="btn btn-secondary">Register</a>
-            {% endif %}
+{% block title %}Home{% endblock %}
 
-            <a href="{% url 'students:about' %}" class="btn btn-success">About Us</a>
-            <a href="{% url 'students:contact' %}" class="btn btn-secondary">Contact Us</a>
-        </header>
-
-        <main>
-            {% block content %}
-            <h2 class="text-center">Available Courses:</h2>
-            {% if courses %}
-                <ul class="list-group">
-                    {% for course in courses %}
-                        <li class="list-group-item">
-                            <a href="{% url 'students:course_detail' course.id %}">{{ course.title }} ({{ course.code }} credits)</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="text-center">No courses available at the moment.</p>
-            {% endif %}
-
-            {% if user.is_authenticated %}
-                <h2 class="text-center">Here are your modules:</h2>
-                {% if modules %}
-                    <ul class="list-group">
-                        {% for module in modules %}
-                            <li class="list-group-item">{{ module.title }} ({{ module.credits }} credits)</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>You are not registered in any modules yet.</p>
-                {% endif %}
-            {% else %}
-                <h2 class="text-center">Please log in to access your profile and modules.</h2>
-            {% endif %}
-            {% endblock %}
-        </main>
-
-        <footer class="mt-4 text-center">
-            <p>&copy; {{ current_year }} Student Management System</p>
-        </footer>
-    </div>
-
-    <!-- JavaScript Libraries -->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-</body>
-</html>
+{% block content %}
+    <h2 class="text-center"'text-dark'>Available Courses:</h2>
+    {% if courses %}
+        <ul class="list-group">
+            {% for course in courses %}
+                <li class="list-group-item">
+                    <a href="{% url 'students:course_detail' course.id %}">
+                        {{ course.name }} ({{ course.course_code }}) - {{ course.credits }} credits
+                    </a>
+                    <p>{{ course.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center.text-dark">No courses available at the moment.</p>
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+        <h2 class="text-center .text-dark">Here are your modules:</h2>
+        {% if modules %}
+            <ul class="list-group">
+                {% for module in modules %}
+                
+                    <li class="list-group-item">{{ module.name }} ({{ module.credits }} credits)</li>
+                {% endfor %}
+            </ul>
+           
+        {% else %}
+            <p>You are not registered in any modules yet.</p>
+        {% endif %}
+    {% else %}
+        <h2 class="text-center">Please log in to access your profile and modules.</h2>
+    {% endif %} 
+    <a href="{% url 'students:module_register' %}" class="btn btn-secondary">module_register</a>
+{% endblock %}

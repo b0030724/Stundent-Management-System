@@ -3,7 +3,8 @@ from django.core.validators import EmailValidator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Student, Module, Registration
-from datetime import date
+
+
 
 # User Registration Form
 class UserRegistrationForm(UserCreationForm):
@@ -12,6 +13,13 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super(UserRegistrationForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
 
 # Form for Editing User Details (username and email)
 class UserForm(forms.ModelForm):
@@ -27,6 +35,12 @@ class StudentForm(forms.ModelForm):
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    def save(self, commit=True):
+        student = super(StudentForm, self).save(commit=False)
+        if commit:
+            student.save()
+        return student
 
 # Module Registration Form (used for registering students for modules)
 class ModuleRegistrationForm(forms.ModelForm):

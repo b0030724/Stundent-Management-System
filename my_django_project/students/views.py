@@ -13,8 +13,17 @@ from .serializers import StudentSerializer, ModuleSerializer
 
 def course_detail(request, id):
     course = get_object_or_404(Course, id=id)
-    return render(request, 'students/course_detail.html', {'course': course})
+    # Get all modules associated with this course
+    modules = course.modules.all()
+    # Get all registrations for these modules
+    registrations = Registration.objects.filter(module__in=modules)
+    # Get all students for these registrations
+    registered_students = Student.objects.filter(registration__in=registrations)
 
+    return render(request, 'students/course_detail.html', {
+        'course': course,
+        'registered_students': registered_students,
+    })
 @login_required
 def profile(request):
     student = get_object_or_404(Student, user=request.user)
@@ -25,30 +34,43 @@ def logout_user(request):
     messages.success(request, "You have successfully logged out.")
     return redirect('students:home')
 
-def home(request):
-    # Get a list of all courses
-    courses = Course.objects.all()
-    context = {'courses': courses}
+from django.core.paginator import Paginator
 
+def home(request):
     if request.user.is_authenticated:
         try:
             student = request.user.student
-            # Get the modules associated with the student's profile
             modules = Module.objects.filter(registration__student=student)
-            context.update({
-                'student': student,
+            courses = Course.objects.all()
+
+            # Pagination
+            paginator = Paginator(courses, 5)  # Show 5 courses per page
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+
+            return render(request, 'students/home.html', {
                 'modules': modules,
+                'courses': page_obj,
+                'student': student,
+                'page_obj': page_obj,  # Pass page_obj to the template
             })
         except Student.DoesNotExist:
-            context.update({
+            paginator = Paginator(Course.objects.all(), 5)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+            return render(request, 'students/home.html', {
+                'courses': page_obj,
                 'message': "You are logged in, but you don't have a student profile.",
+                'page_obj': page_obj,
             })
     else:
-        context.update({
-            'message': "You are not logged in. Some features may be limited.",
+        paginator = Paginator(Course.objects.all(), 5)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return render(request, 'students/home.html', {
+            'courses': page_obj,
+            'page_obj': page_obj,
         })
-
-    return render(request, 'students/home.html', context)
 
 @login_required
 def all_modules(request):
@@ -65,11 +87,18 @@ def register(request):
             student.user = user
             student.save()
             login(request, user)
+            messages.success(request, 'Registration successful! You are now logged in.')
             return redirect('students:home')
+        else:
+            print(user_form.errors)
+            print(student_form.errors)
+            messages.error(request, 'Please correct the errors below.')
     else:
         user_form = UserRegistrationForm()
         student_form = StudentForm()
     return render(request, 'students/register.html', {'user_form': user_form, 'student_form': student_form})
+
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -80,12 +109,16 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('students:profile')
+                messages.success(request, f"Welcome back, {user.username}!")
+                print("User logged in, success message added.")
+                return redirect('students:home')
             else:
                 messages.error(request, "Invalid username or password.")
+                print("Invalid login attempt.")
     else:
         form = LoginForm()
     return render(request, 'students/login.html', {'form': form})
+
 
 @login_required
 def module_register(request):

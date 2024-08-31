@@ -1,35 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% extends 'base.html' %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Detail - {{ course.title }}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-        <header class="my-4">
-            <h1 class="text-center text-primary">{{ course.title }}</h1>
-        </header>
+{% extends 'base.html' %}
 
-        <main>
-            <h2>Course Details</h2>
-            <p><strong>Code:</strong> {{ course.code }}</p>
-            <p><strong>Credits:</strong> {{ course.credits }}</p>
-            <p><strong>Description:</strong> {{ course.description }}</p>  
-            <a href="{% url 'students:home' %}" class="btn btn-secondary">Back to Home</a>
-        </main>
+{% block title %}Course Detail{% endblock %}
 
-        <footer class="mt-4 text-center">
-            <p>&copy; {{ current_year }} Student Management System</p>
-        </footer>
-    </div>
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">{{ course.name }}</h2>
+    <p><strong>Course Code:</strong> {{ course.course_code }}</p>
+    <p><strong>Credits:</strong> {{ course.credits }}</p>
+    <p><strong>Description:</strong> {{ course.description }}</p>
 
-    <!-- JavaScript Libraries -->
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-</body>
-</html>
+    <h3 class="mt-4">Registered Students:</h3>
+    {% if registered_students %}
+        <ul class="list-group">
+            {% for student in registered_students %}
+                <li class="list-group-item">
+                    {{ student.first_name }} {{ student.last_name }} ({{ student.student_number }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No students are registered for this course yet.</p>
+    {% endif %}
+
+    <a href="{% url 'students:home' %}" class="btn btn-secondary mt-3">Back to Courses</a>
+</div>
+{% endblock %}

@@ -1,31 +1,43 @@
-/* styles.css */
-
-/* Header text color */
-.text-primary {
-    color: #0f1214; /* Bootstrap primary color */
+/* Ensure text color is dark across the site */
+body {
+    color: #343a40; /* Dark text color */
 }
 
-/* Subheadings color */
-.text-secondary {
-    color: #6c757d; /* Bootstrap secondary color */
+.navbar-light .navbar-nav .nav-link {
+    color: #374350; /* Dark text color for nav links */
 }
 
-/* Form labels and inputs */
-.form-group label {
-    color: #333; /* Darker color for labels */
+.navbar-light .navbar-brand {
+    color: #343a40; /* Dark text color for brand */
 }
 
-.form-group input, .form-group select, .form-group textarea {
-    border-color: #ced4da; /* Lighter border color */
+.navbar-light .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,..."); /* Customize as needed */
 }
 
-/* Form button */
+.alert {
+    color: #343a40; /* Dark text color for alerts */
+}
+
 .btn-primary {
-    background-color: #007bff; /* Bootstrap primary color */
-    border-color: #007bff;
+    background-color: #007bff; /* Keep the button color or adjust as needed */
+    border-color: #007bff; /* Button border color */
 }
 
 .btn-secondary {
-    background-color: #6c757d; /* Bootstrap secondary color */
-    border-color: #6c757d;
+    background-color: #6c757d; /* Secondary button color */
+    border-color: #6c757d; /* Secondary button border color */
+}
+
+footer p {
+    color: #343a40; /* Dark text color for footer */
+}
+
+/* Additional customization for headings, paragraphs, etc. */
+h1, h2, h3, h4, h5, h6 {
+    color: #333a41; /* Dark color for headings */
+}
+
+p {
+    color: #343a40; /* Dark color for paragraphs */
 }
