@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_rcu_mkf5p=(83s)x3$rm3h7!w=amj4hgf8-z1cp1+q982s!22'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 
 
 ALLOWED_HOSTS = []
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'students',
     'crispy_forms',
     'crispy_bootstrap4',
+    'storages',
     
 ]
 LOGIN_URL = 'students:login'
@@ -138,20 +139,40 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
 # The directory where static files will be collected for production
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+#STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Additional locations of static files
 STATICFILES_DIRS = [
     BASE_DIR / 'static',  # For my static files in the root `static` directory
     BASE_DIR / 'students/static'  # For static files within the `students` app
+    
 ]
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "connection_string": "DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+            "azure_container": "media",
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.azure_storage.AzureStorage",
+        "OPTIONS": {
+            "connection_string": "DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+            "azure_container": "static",
+        },
+    },
+}
 
+
+STATIC_URL = 'https://b0030724dcbs.blob.core.windows.net/static/'
+MEDIA_URL = 'https://b0030724dcbs.blob.core.windows.net/media/'
 # Media files (Uploaded images)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
