@@ -12,7 +12,7 @@ body {
 
 /* Subheadings color */
 .text-secondary {
-    color: #6c757d; /* Bootstrap secondary color */
+    color: #1f2225; /* Bootstrap secondary color */
 }
 
 /* Form labels and inputs */
@@ -36,12 +36,12 @@ body {
 }
 /* Define the custom text color */
 .text-success-emphasis {
-    color: #28a745; /* This is the green color used for success in Bootstrap */
+    color: #324436; /* This is the green color used for success in Bootstrap */
     font-weight: bold; /* Optional: Makes the text bold */
 }
 
 /* Apply text color to the entire page */
 body {
-    color: #28a745; /* This is the green color used for success in Bootstrap */
+    color: #1d251f; /* This is the green color used for success in Bootstrap */
 }
 
