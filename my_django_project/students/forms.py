@@ -31,7 +31,7 @@ class UserForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['student_number', 'phone', 'address', 'date_of_birth', 'course']
+        fields = ['student_number', 'phone', 'address', 'date_of_birth', 'course', 'profile_picture']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }
