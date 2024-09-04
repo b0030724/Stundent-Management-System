@@ -22,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_rcu_mkf5p=(83s)x3$rm3h7!w=amj4hgf8-z1cp1+q982s!22'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
+                 
 
 
 # Application definition
@@ -97,15 +98,16 @@ WSGI_APPLICATION = 'my_django_project.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
+    
         'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sms',
-        'PORT': '3306',
-        'HOST': 'b0030724.mysql.database.azure.com',
-        'USER': 'b0030724',
-        'PASSWORD': 'H4ll4mL4bsUser!',
+        'NAME': os.environ['AZURE_DB_NAME'],
+        'PORT': os.environ['AZURE_DB_PORT'],
+        'HOST': os.environ['AZURE_DB_HOST'],
+        'USER': os.environ['AZURE_DB_USER'],
+        'PASSWORD': os.environ['AZURE_DB_PASSWORD'],
         
-    }
+        }
 }
 
 
@@ -159,14 +161,14 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "connection_string": "DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+            "connection_string": os.environ['AZURE_SA_CONN'],
             "azure_container": "media",
         },
     },
     "staticfiles": {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "connection_string": "DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+            "connection_string": os.environ['AZURE_SA_CONN'],
             "azure_container": "static",
         },
     },
