@@ -41,7 +41,6 @@ mysqlclient==1.4.6
 netifaces==0.11.0
 oauthlib==3.2.0
 olefile==0.46
-onboard==1.4.1
 pexpect==4.8.0
 Pillow==9.0.1
 ply==3.11
