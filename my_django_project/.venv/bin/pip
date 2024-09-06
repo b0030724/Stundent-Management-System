@@ -1,4 +1,4 @@
-#!/home/student/Desktop/Stundent-Management-System/my_django_project/.venv/bin/python
+#!/home/student/Desktop/Stundent-Management-System/my_django_project/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
