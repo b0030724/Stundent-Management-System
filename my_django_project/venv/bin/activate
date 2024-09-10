@@ -67,3 +67,12 @@ fi
 if [ -n "${BASH:-}" -o -n "${ZSH_VERSION:-}" ] ; then
     hash -r 2> /dev/null
 fi
+
+
+export AZURE_SA_CONN="DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+export AZURE_DB_NAME= 'sms'
+export AZURE_DB_PORT='3306'
+export AZURE_DB_HOST='b0030724.mysql.database.azure.com'
+export AZURE_DB_USER= 'b0030724'
+export AZURE_DB_PASSWORD='H4ll4mL4bsUser!'
+export SECRET_KEY='_rcu_mkf5p=(83s)x3$rm3h7!w=amj4hgf8-z1cp1+q982s!22'

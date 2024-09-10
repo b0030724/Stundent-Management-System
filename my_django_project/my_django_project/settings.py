@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_rcu_mkf5p=(83s)x3$rm3h7!w=amj4hgf8-z1cp1+q982s!22'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'students',
     'crispy_forms',
     'crispy_bootstrap4',
-    'storages',
+    'storages'
+    
     
 ]
 LOGIN_URL = 'students:login'
@@ -52,7 +53,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4' 
 LOGOUT_REDIRECT_URL = '/login/'  
 
-load_dotenv()
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = 'ed37add6c0e1e2'
@@ -99,11 +100,11 @@ WSGI_APPLICATION = 'my_django_project.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sms',
-        'PORT': '3306',
-        'HOST': 'b0030724.mysql.database.azure.com',
-        'USER': 'b0030724',
-        'PASSWORD': 'H4ll4mL4bsUser!',
+        'NAME': os.environ['AURE_DB_NAME'],
+        'PORT': os.environ['AURE_DB_PORT'],
+        'HOST': os.environ['AURE_DB_HOST'],
+        'USER': os.environ['AURE_DB_USER'],
+        'PASSWORD': os.environ['AURE_DB_PASSWORD'],
         
     }
 }
@@ -150,7 +151,7 @@ USE_TZ = True
 #STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Additional locations of static files
-STATICFILES_DIRS = [
+#STATICFILES_DIRS = [
     BASE_DIR / 'static',  # For my static files in the root `static` directory
     BASE_DIR / 'students/static'  # For static files within the `students` app
     
@@ -159,14 +160,14 @@ STORAGES = {
     "default": {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "connection_string": "DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+            "connection_string": os.environ['AURE_DB_CONN'],
             "azure_container": "media",
         },
     },
     "staticfiles": {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
         "OPTIONS": {
-            "connection_string": "DefaultEndpointsProtocol=https;AccountName=b0030724dcbs;AccountKey=BtbCdiYL2rZWe7sh5w2QoMQtL0Lol5QvQg7AHl6xluLrfvpNPz1CGsR/B8hL5FAsvf2NAnc9qpSE+AStYr5X1Q==;EndpointSuffix=core.windows.net;",
+            "connection_string": os.environ['AURE_DB_CONN'],
             "azure_container": "static",
         },
     },
