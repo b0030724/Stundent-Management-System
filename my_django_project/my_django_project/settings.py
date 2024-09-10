@@ -153,10 +153,9 @@ USE_TZ = True
 #STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Additional locations of static files
-#STATICFILES_DIRS = [
+STATICFILES_DIRS = [
     BASE_DIR / 'static',  # For my static files in the root `static` directory
-    BASE_DIR / 'students/static'  # For static files within the `students` app
-    
+    BASE_DIR / 'students/static'  # For static files within the `students` app   
 ]
 STORAGES = {
     "default": {
