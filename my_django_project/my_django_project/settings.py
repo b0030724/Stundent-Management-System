@@ -23,14 +23,15 @@ WEBSITE_HOSTNAME = os.environ.get['WEBSITE_HOSTNAME']
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
+WEBSITE_HOSTNAME = os.environ.get('WEBSITE_HOSTNAME', None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = WEBSITE_HOSTNAME == None
+DEBUG = WEBSITE_HOSTNAME is None
 
-ALLOWED_HOSTS = [] if DEBUG else [WEBSITE_HOSTNAME]
+ALLOWED_HOSTS = [] if DEBUG else [WEBSITE_HOSTNAME, f"{WEBSITE_HOSTNAME}.azurewebsites.net"]
 
 if not DEBUG:
-    CSRF_TRUSTED_ORIGINS = [f'https://{WEBSITE_HOSTNAME}']
+    CSRF_TRUSTED_ORIGINS = [f'https://{WEBSITE_HOSTNAME}', f'https://{WEBSITE_HOSTNAME}.azurewebsites.net']
 
 # Application definition
 
@@ -150,13 +151,14 @@ USE_TZ = True
 #STATIC_URL = '/static/'
 
 # The directory where static files will be collected for production
-#STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Additional locations of static files
-#STATICFILES_DIRS = [
-   # BASE_DIR / 'static',  # For my static files in the root `static` directory
-    #BASE_DIR / 'students/static'  # For static files within the `students` app   
-#]
+STATICFILES_DIRS = [
+   BASE_DIR / 'static',  # For my static files in the root `static` directory
+   BASE_DIR / 'students/static'  # For static files within the `students` app   
+]
+
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.azure_storage.AzureStorage",
