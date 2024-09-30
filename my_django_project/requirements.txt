@@ -1,6 +1,8 @@
 asgiref==3.8.1
 azure-core==1.30.2
 azure-storage-blob==12.20.0
+bootstrap4=4.5.3
+crispy-forms==4.2.3
 certifi==2024.6.2
 cffi==1.16.0
 charset-normalizer==3.3.2
